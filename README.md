@@ -1,8 +1,8 @@
-# aerogear-ios-httpstub
+# aerogear-ios-httpstub [![Build Status](https://travis-ci.org/aerogear/aerogear-ios-httpstub.png)](https://travis-ci.org/aerogear/aerogear-ios-httpstub)
 
 A small library inspired by [OHHTTPStubs](https://github.com/AliSoftware/OHHTTPStubs) to stub your network requests written in Swift.
 
-> This module is beta software, it currently supports Xcode 6 Beta 6.
+> This module is beta software, it currently supports Xcode 6.1
 
 ## Example Usage
 

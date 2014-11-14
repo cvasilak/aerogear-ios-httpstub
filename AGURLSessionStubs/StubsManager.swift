@@ -38,6 +38,10 @@ public class StubsManager {
         Utils.swizzleFromSelector("defaultSessionConfiguration", toSelector: "swizzle_defaultSessionConfiguration", forClass: NSURLSessionConfiguration.classForCoder())
         
         Utils.swizzleFromSelector("ephemeralSessionConfiguration", toSelector: "swizzle_ephemeralSessionConfiguration", forClass: NSURLSessionConfiguration.classForCoder())
+    
+        // it will also allow 'NSURLSession.sharedSession()' to work for clients bypassing  intiliazation with
+        // a NSURLSessionConfiguration object (either 'default' or 'ephemeral')
+        NSURLProtocol.registerClass(StubURLProtocol.classForCoder());
     }
     
     public class func stubRequestsPassingTest(testBlock: StubTestBlock, withStubResponse responseBlock: StubResponseBlock) -> StubDescriptor {
@@ -102,8 +106,8 @@ private class Utils {
     
     private class func swizzleFromSelector(selector: String!, toSelector: String!, forClass:AnyClass!) {
         
-        var originalMethod = class_getClassMethod(forClass, Selector.convertFromStringLiteral(selector))
-        var swizzledMethod = class_getClassMethod(forClass, Selector.convertFromStringLiteral(toSelector))
+        var originalMethod = class_getClassMethod(forClass, Selector(stringLiteral: selector))
+        var swizzledMethod = class_getClassMethod(forClass, Selector(stringLiteral: toSelector))
         
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }
@@ -122,7 +126,7 @@ extension NSURLSessionConfiguration {
         
         var result = [AnyObject]()
         
-        for proto in config.protocolClasses {
+        for proto in config.protocolClasses! {
             result.append(proto)
         }
 
@@ -138,7 +142,7 @@ extension NSURLSessionConfiguration {
         
         var result = [AnyObject]()
         
-        for proto in config.protocolClasses {
+        for proto in config.protocolClasses! {
             result.append(proto)
         }
 
